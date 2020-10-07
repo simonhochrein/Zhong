@@ -1,0 +1,48 @@
+@import "@blueprintjs/core/lib/css/blueprint.css";
+@import "../node_modules/@blueprintjs/core/lib/scss/variables.scss";
+
+body {
+  margin: 0;
+}
+
+#root > div {
+  height: 100%;
+}
+
+.progress-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  .progress {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transform: rotate(-90deg);
+    circle {
+      stroke: $pt-divider-black;
+      fill: none;
+      stroke-width: 4;
+      &.fill {
+        stroke-linecap: round;
+        stroke: $pt-intent-success;
+        transition: all 100ms ease;
+      }
+    }
+  }
+  .progress-content {
+    
+  }
+}
+.bp3-dark {
+  background: #293742;
+  .progress {
+    .fill {
+      stroke: $pt-intent-success;
+    }
+  }
+}
