@@ -16,19 +16,19 @@ export const Progress: FunctionComponent<IProgressProps> = (props) => {
   return (
     <div className={"progress-container"}>
       <svg className="progress" viewBox={"0 0 120 120"}>
-        <circle r={54} cx={60} cy={60}></circle>
-        <circle
-          className="fill"
-          r={54}
-          cx={60}
-          cy={60}
-          strokeDashoffset={radius}
-          strokeDasharray={circumference}
-        ></circle>
+        <circle r={54} cx={60} cy={60} />
+        {props.progress > -1 && (
+          <circle
+            className="fill"
+            r={54}
+            cx={60}
+            cy={60}
+            strokeDashoffset={radius}
+            strokeDasharray={circumference}
+          />
+        )}
       </svg>
-      <div className="progress-content">
-        {props.children}
-      </div>
+      <div className="progress-content">{props.children}</div>
     </div>
   );
 };
