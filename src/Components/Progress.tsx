@@ -10,7 +10,7 @@ export const Progress: FunctionComponent<IProgressProps> = (props) => {
   const [radius, setRadius] = useState(0);
 
   useEffect(() => {
-    setRadius(circumference * (1 - props.progress / 100));
+    setRadius(circumference * props.progress);
   });
 
   return (

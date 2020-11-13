@@ -1,5 +1,6 @@
 import React from "react";
 import { css, cx } from "emotion";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const POPUP = css`
   position: absolute;
@@ -17,12 +18,23 @@ const POPUP_CONTENT = css`
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 8px;
 `;
 
-export const Popup: React.FunctionComponent<{style?, open: boolean}> = ({ children, style, open }) => {
+export const Popup: React.FunctionComponent<{ style?; open: boolean }> = ({
+  children,
+  style,
+  open,
+}) => {
   return (
-    <div className={cx("popup", POPUP)} style={{display: open ? 'flex' : 'none'}}>
-      <div className={POPUP_CONTENT}>{children}</div>
-    </div>
+    <TransitionGroup>
+      {open && (
+        <CSSTransition classNames="popup" timeout={200} key='popup'>
+          <div className={cx("popup", POPUP)}>
+            <div className={POPUP_CONTENT}>{children}</div>
+          </div>
+        </CSSTransition>
+      )}
+    </TransitionGroup>
   );
-}
+};

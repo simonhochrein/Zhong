@@ -1,41 +1,63 @@
 import { Colors, ContextMenuTarget, Menu, MenuItem } from "@blueprintjs/core";
-import { TimezonePicker } from "@blueprintjs/timezone";
-import moment from "moment";
+import { css, cx } from "emotion";
 import React, { useState } from "react";
-import { useInterval } from "../Lib/useInterval";
 
 interface IClockFaceProps {
   timezone: string;
   style?: any;
-  onRemove: (zone) => void;
+  onRemove(zone: string): void;
+  onEdit(): void;
 }
 
 interface IClockFaceState {
   hours: number;
   minutes: number;
+  active: boolean;
 }
+
+const CLOCKFACE = css`
+  flex-shrink: 1;
+  padding: 2px;
+  margin: 2px;
+  border-radius: 12px;
+  transition: background 200ms ease-in-out;
+  :hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const CLOCKFACE_ACTIVE = css`
+  background: rgba(255, 255, 255, 0.1);
+`;
 
 @ContextMenuTarget
 export class ClockFace extends React.Component<
   IClockFaceProps,
   IClockFaceState
 > {
-  state = {
-    hours: 0,
-    minutes: 0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...this.currentTime(),
+      active: false
+    }
+  }
   componentDidMount() {
     setInterval(() => {
-      const dateTime = new Date(
-        new Date().toLocaleString("en-US", {
-          timeZone: this.props.timezone,
-        })
-      );
-      this.setState({
-        hours: dateTime.getHours(),
-        minutes: dateTime.getMinutes(),
-      });
+      this.setState(this.currentTime());
     }, 100);
+  }
+
+  currentTime() {
+    const dateTime = new Date(
+      new Date().toLocaleString("en-US", {
+        timeZone: this.props.timezone,
+      })
+    );
+    return {
+      hours: dateTime.getHours(),
+      minutes: dateTime.getMinutes(),
+    };
   }
 
   deg2rad(deg) {
@@ -54,9 +76,11 @@ export class ClockFace extends React.Component<
     const my = mr * Math.sin(this.deg2rad(minutes * 6 - 90));
 
     // const fill = (hours >= 18 || hours <= 6) ? Colors.BLACK : Colors.WHITE;
-    console.log(moment.tz(timezone));
     return (
-      <div style={{ flex: 1, ...(style ? style : {}) }}>
+      <div
+        style={{ ...(style ? style : {}) }}
+        className={cx(CLOCKFACE, { [CLOCKFACE_ACTIVE]: this.state.active })}
+      >
         <svg viewBox="0 0 80 120" width={80} height={120} color={Colors.WHITE}>
           <circle
             fill="none"
@@ -106,7 +130,7 @@ export class ClockFace extends React.Component<
             textAnchor={"middle"}
             fontSize={10}
           >
-            {moment.tz(timezone).zoneName()}
+            {timezone.split("/").slice(-1)[0].replace(/_/g, " ")}
           </text>
         </svg>
       </div>
@@ -114,15 +138,24 @@ export class ClockFace extends React.Component<
   }
 
   renderContextMenu() {
+    this.setState({ active: true });
     return (
       <Menu>
-        <MenuItem text="Edit" icon='edit' />
-        <MenuItem text="Delete" icon='trash' onClick={() => this.props.onRemove(this.props.timezone)} />
+        <MenuItem
+          text="Edit Timezones"
+          icon="edit"
+          onClick={() => this.props.onEdit()}
+        />
+        <MenuItem
+          text="Delete"
+          icon="trash"
+          onClick={() => this.props.onRemove(this.props.timezone)}
+        />
       </Menu>
-    )
+    );
   }
 
-  onContextMenuClose() {
-
-  }
+  onContextMenuClose = () => {
+    this.setState({ active: false });
+  };
 }

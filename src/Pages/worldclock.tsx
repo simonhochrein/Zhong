@@ -1,9 +1,12 @@
-import { Button, Icon, Menu, MenuItem } from "@blueprintjs/core";
-import { TimezonePicker } from "@blueprintjs/timezone";
-import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { Button, Icon, InputGroup, Menu, MenuItem } from "@blueprintjs/core";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { ClockFace } from "../Components/ClockFace";
-import { Popup } from "../Components/Popup";
-import moment from "moment";
 import "moment-timezone";
 import { Storage } from "../Lib/storage";
 import { css } from "emotion";
@@ -12,13 +15,20 @@ import {
   CSSTransition,
   TransitionGroup,
 } from "react-transition-group";
+import { TimezonePicker } from "../Components/TimezonePicker";
+
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { SortableZone as SortableTimezone } from "../Components/SortableTimezone";
 
 const addTimezoneContainer = css`
   height: 120px;
   width: 80px;
   display: flex;
   justify-content: center;
-  flex: 1;
+  flex-shrink: 1;
+  margin-top: 12;
+  /* align-items: center; */
 `;
 const addTimezoneIcon = css`
   height: 62px;
@@ -27,10 +37,9 @@ const addTimezoneIcon = css`
   border: solid 2px #5c7080;
   color: #5c7080;
   display: flex;
-  margin-top: 9;
   justify-content: center;
   align-items: center;
-  transition: all ease 100ms;
+  transition: all ease 200ms;
   :hover {
     border-color: white;
     color: white;
@@ -52,19 +61,11 @@ const AddTimezone: React.FunctionComponent<{ onClick: () => void }> = ({
 export function WorldClock() {
   const [zones, setZones] = useState([]);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   useEffect(() => {
     Storage.load();
     setZones(Storage.get("timezones") || []);
   }, []);
-  useLayoutEffect(() => {
-    const el = document.querySelector(`[data-timezone="${moment.tz.guess()}"]`);
-    if (el) {
-      el.scrollIntoView({
-        block: "center",
-        behavior: "auto",
-      });
-    }
-  }, [pickerOpen]);
   const onClick = (name) => {
     const _zones = [...(Storage.get("timezones") || []), name];
     setZones(_zones);
@@ -72,11 +73,49 @@ export function WorldClock() {
     Storage.set("timezones", _zones);
     Storage.save();
   };
-  const onRemove = useCallback((zone) => {
-    const _zones = [...zones];
-    _zones.splice(_zones.indexOf(zone), 1);
-    setZones(_zones);
-  }, [zones]);
+  const onRemove = useCallback(
+    (zone) => {
+      const _zones = [...zones];
+      _zones.splice(_zones.indexOf(zone), 1);
+      setZones(_zones);
+      Storage.set("timezones", _zones);
+      Storage.save();
+    },
+    [zones]
+  );
+  const onEdit = useCallback(() => {
+    setEditMode(true);
+  }, []);
+  const moveCard = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const dragCard = zones[dragIndex];
+      const _zones = [...zones];
+      _zones.splice(_zones.indexOf(dragCard), 1);
+      _zones.splice(hoverIndex, 0, dragCard);
+      setZones(_zones);
+    },
+    [zones]
+  );
+
+  if (editMode) {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <div style={{ padding: "40px 0" }}>
+          <DndProvider backend={HTML5Backend}>
+            {zones.map((zone, index) => (
+              <SortableTimezone
+                name={zone}
+                key={zone}
+                index={index}
+                moveCard={moveCard}
+              />
+            ))}
+          </DndProvider>
+        </div>
+        <Button onClick={() => setEditMode(false)}>Save</Button>
+      </div>
+    );
+  }
   return (
     <div>
       <TransitionGroup
@@ -85,51 +124,27 @@ export function WorldClock() {
           textAlign: "center",
           display: "flex",
           flexWrap: "wrap",
+          justifyContent: "center",
         }}
       >
         {zones.map((zone) => (
           <CSSTransition timeout={500} classNames="clock" key={zone}>
-            <ClockFace timezone={zone} key={zone} onRemove={onRemove}/>
+            <ClockFace
+              timezone={zone}
+              key={zone}
+              onRemove={onRemove}
+              onEdit={onEdit}
+            />
           </CSSTransition>
         ))}
         <AddTimezone onClick={() => setPickerOpen(true)} />
       </TransitionGroup>
-      <Popup style={{ textAlign: "center" }} open={pickerOpen}>
-        <Menu style={{ height: "80%", overflow: "scroll", flex: 1 }}>
-          {moment.tz
-            .names()
-            .filter((name) => /\//.test(name) && !/Etc\//.test(name))
-            .sort((a, b) => {
-              return moment.tz(b).utcOffset() - moment.tz(a).utcOffset();
-            })
-            .map((name) => (
-              <MenuItem
-                key={name}
-                text={name}
-                data-timezone={name}
-                label={moment.tz(name).format("Z")}
-                onClick={() => onClick(name)}
-              />
-            ))}
-        </Menu>
-        <div
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 1,
-            maxHeight: 60,
-            display: "flex",
-          }}
-        >
-          <Button minimal>
-            <Icon
-              iconSize={18}
-              icon="small-cross"
-              onClick={() => setPickerOpen(false)}
-            />
-          </Button>
-        </div>
-      </Popup>
+      <TimezonePicker
+        disabled={zones}
+        open={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        onSelect={onClick}
+      />
     </div>
   );
 }

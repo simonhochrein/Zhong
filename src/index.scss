@@ -7,6 +7,10 @@ body {
   -webkit-app-region: no-drag;
 }
 
+* {
+  outline: none!important;
+}
+
 .bp3-button {
   outline: 0;
 }
@@ -38,7 +42,7 @@ body {
       &.fill {
         stroke-linecap: round;
         stroke: $pt-intent-success;
-        // transition: all 100ms ease;
+        transition: all 1000ms linear;
       }
     }
   }
@@ -70,17 +74,17 @@ body {
   justify-content: center;
   align-items: center;
   height: 100%;
-  animation: fade-in 250ms forwards;
-  opacity: 0;
+  // animation: fade-in 250ms forwards;
+  opacity: 1;
   
   h1 {
-    animation: move-up 500ms forwards;
-    animation-delay: 1s;
+    // animation: move-up 500ms forwards;
+    // animation-delay: 1s;
   }
   .action {
-    animation: fade-in 250ms forwards;
-    animation-delay: 1.5s;
-    opacity: 0;
+    // animation: fade-in 250ms forwards;
+    // animation-delay: 1.5s;
+    opacity: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -112,4 +116,34 @@ body {
 .clock-exit-active {
   opacity: 0;
   transition: opacity 500ms;
+}
+
+.popup-enter {
+  opacity: 0;
+}
+.popup-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.popup-exit {
+  opacity: 1;
+}
+.popup-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.page-enter {
+  opacity: 0;
+}
+.page-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.page-exit {
+  opacity: 1;
+}
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
 }

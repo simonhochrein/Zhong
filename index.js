@@ -18,6 +18,7 @@ app.on("ready", () => {
     skipTaskbar: true,
     webPreferences: {
       nodeIntegration: true,
+      nodeIntegrationInWorker: true,
       enableRemoteModule: true,
     },
     resizable: false

@@ -1,5 +1,12 @@
 {
     "compilerOptions": {
+        "lib": [
+            "DOM",
+            "ES5",
+            "WebWorker"
+        ],
+        "target": "ES5",
+        "moduleResolution": "Node",
         "experimentalDecorators": true,
         "jsx": "react",
         "esModuleInterop": true
