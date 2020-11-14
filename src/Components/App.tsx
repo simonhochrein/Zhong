@@ -35,8 +35,8 @@ const FOOTER = css`
 export function App() {
   const [tab, setTab] = useState(0);
 
-  const getComponent = (tab) => {
-    switch (tab) {
+  const getComponent = (_tab: number) => {
+    switch (_tab) {
       case 0:
         return <WorldClock />;
       case 1:
