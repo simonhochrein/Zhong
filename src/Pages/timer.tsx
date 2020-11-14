@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React from "react";
 import { jsx, css } from "@emotion/react";
-import { Button, H1 } from "@blueprintjs/core";
+import { Button, H1, Icon } from "@blueprintjs/core";
 import { TimePicker, TimePrecision } from "@blueprintjs/datetime";
 import { Progress } from "../Components/Progress";
 import { getMinTime } from "../Lib/timeUtil";
@@ -45,9 +45,11 @@ export class Timer extends React.Component {
   tickCallback = (current) => {
     this.setState({ current: current });
   };
-  doneCallback = () => {
+  doneCallback = (cancelled) => {
+    if(!cancelled) {
+      ipcRenderer.send("alert");
+    }
     this.setState({ duration: -1, current: 0 });
-    ipcRenderer.send("alert");
   };
   stateCallback = (state) => {
     this.setState({ running: state == ITimerState.Running });
@@ -60,6 +62,10 @@ export class Timer extends React.Component {
   onChange = (newTime: Date) => {
     this.setState({ selectedDuration: newTime.getTime() - getMinTime() });
   };
+  reset = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    TimerClass.instance.reset();
+  }
 
   formatTimeLeft() {
     let duration = this.state.duration - this.state.current;
@@ -101,6 +107,9 @@ export class Timer extends React.Component {
             active={this.state.running}
           >
             <H1>{this.formatTimeLeft()}</H1>
+            {!this.state.running && (
+              <Button icon="reset" outlined intent="warning" onClick={this.reset} />
+            )}
           </Progress>
         </div>
       );

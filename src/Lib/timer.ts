@@ -64,6 +64,15 @@ export class Timer extends EventEmitter {
     }
   }
 
+  reset() {
+    worker.postMessage({
+      type: "pause",
+    });
+    this.state = ITimerState.Stopped;
+    this.emit("state", this.state);
+    this.emit("done", true);
+  }
+
   start(duration) {
     this.state = ITimerState.Running;
     this.emit("state", this.state);

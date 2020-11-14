@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, ipcMain } = require("electron");
+const { app, BrowserWindow, Tray, ipcMain, Menu } = require("electron");
 const Positioner = require("electron-positioner");
 require("@electron/remote/main").initialize();
 
@@ -57,7 +57,7 @@ app.on("ready", () => {
   window.loadURL(`file://${__dirname}/dist/index.html`);
 
   window.on("blur", () => {
-    window.hide();
+    // window.hide();
   });
 
   tray = new Tray(`${__dirname}/img/ZhongTemplate.png`);
@@ -71,6 +71,19 @@ app.on("ready", () => {
     } else {
       window.hide();
     }
+  });
+  tray.on("right-click", () => {
+    tray.popUpContextMenu(
+      Menu.buildFromTemplate([
+        {
+          label: "Quit",
+          click() {
+            app.quit();
+          },
+          accelerator: "CommandOrControl+Q"
+        },
+      ])
+    );
   });
 
   ipcMain.on("alert", () => {

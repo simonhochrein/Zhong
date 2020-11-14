@@ -1,6 +1,7 @@
 import { Colors, ContextMenuTarget, Menu, MenuItem } from "@blueprintjs/core";
 import { css, cx } from "emotion";
 import React from "react";
+import ReactDOM from "react-dom";
 
 interface IClockFaceProps {
   timezone: string;
@@ -39,8 +40,8 @@ export class ClockFace extends React.Component<
     super(props);
     this.state = {
       ...this.currentTime(),
-      active: false
-    }
+      active: false,
+    };
   }
   componentDidMount() {
     setInterval(() => {
@@ -80,8 +81,9 @@ export class ClockFace extends React.Component<
       <div
         style={{ ...(style ? style : {}) }}
         className={cx(CLOCKFACE, { [CLOCKFACE_ACTIVE]: this.state.active })}
+        onClick={(e) => e.target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: e.clientX, clientY: e.clientY}))}
       >
-        <svg viewBox="0 0 80 120" width={80} height={120} color={Colors.WHITE}>
+        <svg viewBox="0 0 80 120" width={80} height={120} color={Colors.WHITE} style={{pointerEvents: 'none'}}>
           <circle
             fill="none"
             cx={40}

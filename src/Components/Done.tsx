@@ -48,11 +48,25 @@ to{
 }
 `;
 
+const CONTAINER = css`
+  height: 100%;
+  position: relative;
+  animation: ${fadeIn} 1s forwards;
+  background-color: ${Colors.DARK_GRAY3};
+  text-align: center;
+`;
+
 const DONE = css`
   position: absolute;
   top: 178px;
   left: 50%auto;
   transform: translateX(-50%);
+`;
+
+const ANIMATION = css`
+  position: absolute;
+  left: 0;
+  top: 0;
 `;
 
 export function Done() {
@@ -67,14 +81,7 @@ export function Done() {
     });
   }
   return (
-    <div
-      css={css`
-        height: 100%;
-        position: relative;
-        animation: ${fadeIn} 1s forwards;
-        background-color: ${Colors.DARK_GRAY3};
-      `}
-    >
+    <div css={CONTAINER}>
       <Global
         styles={css`
           html,
@@ -84,14 +91,7 @@ export function Done() {
           }
         `}
       />
-      <svg
-        width={300}
-        height={300}
-        viewBox={"0 0 300 300"}
-        css={css`
-          position: absolute;
-        `}
-      >
+      <svg width={300} height={300} viewBox={"0 0 300 300"} css={ANIMATION}>
         {points.map(({ x, y }, k) => (
           <circle
             key={k}

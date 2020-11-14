@@ -27,6 +27,11 @@ const PROGRESS = css`
   transform: rotate(-90deg);
 `;
 
+const PROGRESS_CONTENT = css`
+  text-align: center;
+  z-index: 1;
+`;
+
 export const Progress: FunctionComponent<IProgressProps> = (props) => {
   const circumference = 2 * Math.PI * 54;
 
@@ -64,7 +69,7 @@ export const Progress: FunctionComponent<IProgressProps> = (props) => {
           />
         )}
       </svg>
-      <div className="progress-content">{props.children}</div>
+      <div css={PROGRESS_CONTENT}>{props.children}</div>
     </div>
   );
 };

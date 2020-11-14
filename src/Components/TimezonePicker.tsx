@@ -99,6 +99,7 @@ export class TimezonePicker extends React.Component<
           leftIcon="search"
           placeholder="Choose a timezone"
           onChange={(e) => this.setState({ search: e.target.value })}
+          autoFocus
         />
         <Menu css={TIMEZONE_PICKER}>
           {this.filteredTimezones.map((name) => (
