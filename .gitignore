@@ -9,3 +9,9 @@ node_modules/
 dist
 
 settings.json
+
+# electron-builder
+build
+zhong-*.tgz
+
+**/.DS_Store
