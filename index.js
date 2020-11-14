@@ -27,12 +27,14 @@ const getPosition = (_window, _bounds) => {
     case "linux":
       return positioner.move("topRight");
     default:
-      return positioner.move("bottom", _bounds);
+      return positioner.move("bottomRight");
   }
 };
 
 app.on("ready", () => {
-  app.dock.hide();
+  if (app.dock) {
+    app.dock.hide();
+  }
   window = new BrowserWindow({
     width: 300,
     height: 500,
