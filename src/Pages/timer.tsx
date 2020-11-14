@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React from "react";
 import { jsx, css } from "@emotion/react";
-import { Button, H1, Icon } from "@blueprintjs/core";
+import { Button, H1 } from "@blueprintjs/core";
 import { TimePicker, TimePrecision } from "@blueprintjs/datetime";
 import { Progress } from "../Components/Progress";
 import { getMinTime } from "../Lib/timeUtil";

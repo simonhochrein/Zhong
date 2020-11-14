@@ -80,7 +80,7 @@ app.on("ready", () => {
           click() {
             app.quit();
           },
-          accelerator: "CommandOrControl+Q"
+          accelerator: "CommandOrControl+Q",
         },
       ])
     );

@@ -1,7 +1,6 @@
 import { Colors, ContextMenuTarget, Menu, MenuItem } from "@blueprintjs/core";
 import { css, cx } from "emotion";
 import React from "react";
-import ReactDOM from "react-dom";
 
 interface IClockFaceProps {
   timezone: string;
