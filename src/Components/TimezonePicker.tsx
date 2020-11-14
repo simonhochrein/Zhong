@@ -1,6 +1,6 @@
 import { InputGroup, Menu, MenuItem, Button, Icon } from "@blueprintjs/core";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Popup } from "./Popup";
 import Fuse from "fuse.js";
 import ReactDOM from "react-dom";
@@ -19,13 +19,13 @@ interface ITimezonePickerState {
 
 function getTimezones() {
   const offsets = {};
-  const timezones = moment.tz
+  const _timezones = moment.tz
     .names()
     .filter((name) => /\//.test(name) && !/Etc\//.test(name));
-  for (const timezone of timezones) {
+  for (const timezone of _timezones) {
     offsets[timezone] = moment.tz(timezone).utcOffset();
   }
-  return timezones.sort((a, b) => {
+  return _timezones.sort((a, b) => {
     return offsets[b] - offsets[a];
   });
 }

@@ -1,6 +1,6 @@
-import { Colors, Icon, Popover, Position, Tooltip } from "@blueprintjs/core";
+import { Colors, Icon } from "@blueprintjs/core";
 import { css, cx } from "emotion";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { TabContext } from "../Lib/TabContext";
 
 const FOOTER_CONTAINER = css`
@@ -24,7 +24,7 @@ const FOOTER_ITEM = css`
   transition: color 200ms ease-in-out;
 `;
 export function Footer() {
-  const [tab, setTab] = useContext(TabContext);
+  const [, setTab] = useContext(TabContext);
   return (
     <div className={FOOTER_CONTAINER}>
       <div
