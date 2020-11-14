@@ -37,7 +37,7 @@ export function Footer() {
         className={cx("footer-item", FOOTER_ITEM)}
         onClick={() => setTab(1)}
       >
-        <Icon icon="notifications" />
+        <Icon icon="dashboard" />
       </div>
       <div
         className={cx("footer-item", FOOTER_ITEM)}

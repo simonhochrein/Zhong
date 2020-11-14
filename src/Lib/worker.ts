@@ -5,8 +5,6 @@ let ticks = 0;
 let duration = 0;
 
 setInterval(() => {
-  postMessage({ type: "alarmtick", data: Date.now() });
-
   if (running) {
     ticks++;
 

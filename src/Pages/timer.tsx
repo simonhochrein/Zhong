@@ -7,6 +7,8 @@ import { getMinTime } from "../Lib/timeUtil";
 import { BrowserWindow } from "@electron/remote";
 import { Timer as TimerClass } from "../Lib/timer";
 
+import { ipcRenderer } from "electron";
+
 const padNumber = (num: number) => num.toString().padStart(2, "0");
 
 export class Timer extends React.Component {
@@ -21,9 +23,12 @@ export class Timer extends React.Component {
   };
   doneCallback = () => {
     this.setState({ duration: -1, current: 0 });
+    ipcRenderer.send("alert");
   };
   startTimer() {
-    TimerClass.instance.start(this.state.selectedDuration / 1000);
+    if (this.state.selectedDuration > 0) {
+      TimerClass.instance.start(this.state.selectedDuration / 1000);
+    }
   }
   onChange = (newTime: Date) => {
     this.setState({ selectedDuration: newTime.getTime() - getMinTime() });
@@ -65,7 +70,9 @@ export class Timer extends React.Component {
       return (
         <div
           style={{ display: "flex", flexDirection: "column", height: "100%" }}
-          onClick={() => { TimerClass.instance.toggle(); }}
+          onClick={() => {
+            TimerClass.instance.toggle();
+          }}
         >
           <div style={{ flex: 1 }}></div>
           <Progress progress={this.state.current / this.state.duration}>
@@ -101,6 +108,7 @@ export class Timer extends React.Component {
               fill
               large
               className="start"
+              outlined
             >
               Start New Timer
             </Button>

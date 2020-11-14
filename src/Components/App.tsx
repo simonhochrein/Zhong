@@ -7,8 +7,8 @@ import { css, cx } from "emotion";
 import { Footer } from "./Footer";
 import { TabContext } from "../Lib/TabContext";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { Alarm } from "../Pages/alarm";
 import { Timer as TimerClass } from "../Lib/timer";
+import { StopWatch } from "../Pages/stopwatch";
 
 export function App() {
   const [theme, setTheme] = useState(nativeTheme.shouldUseDarkColors);
@@ -54,7 +54,7 @@ export function App() {
       case 0:
         return <WorldClock />;
       case 1:
-        return <Alarm />;
+        return <StopWatch />;
       case 2:
         return <Timer />;
     }

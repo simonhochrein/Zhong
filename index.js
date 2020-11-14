@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray } = require("electron");
+const { app, BrowserWindow, Tray, ipcMain } = require("electron");
 require("@electron/remote/main").initialize();
 
 /**
@@ -16,19 +16,42 @@ app.on("ready", () => {
     frame: false,
     show: false,
     skipTaskbar: true,
+    transparent: true,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
       enableRemoteModule: true,
     },
-    resizable: false
+    resizable: false,
   });
 
   window.on("hide", () => {
     visible = false;
   });
 
+  ipcMain.on("alert", () => {
+    const done = new BrowserWindow({
+      width: 300,
+      height: 300,
+      frame: false,
+      transparent: true,
+      skipTaskbar: true,
+      alwaysOnTop: true,
+      webPreferences: {
+        nodeIntegration: true,
+        nodeIntegrationInWorker: true,
+        enableRemoteModule: true,
+      },
+      resizable: false,
+    });
+    done.loadURL(`file://${__dirname}/dist/done.html`);
+  });
+
   window.loadURL(`file://${__dirname}/dist/index.html`);
+
+  window.on("blur", () => {
+    window.hide();
+  });
 
   tray = new Tray(`${__dirname}/img/ZhongTemplate.png`);
   tray.setIgnoreDoubleClickEvents(true);

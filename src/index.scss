@@ -4,15 +4,11 @@
 
 body {
   margin: 0;
-  -webkit-app-region: no-drag;
+  opacity: 0.95;
 }
 
 * {
   outline: none!important;
-}
-
-.bp3-button {
-  outline: 0;
 }
 
 #root > div {
