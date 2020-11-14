@@ -1,12 +1,35 @@
 const { app, BrowserWindow, Tray, ipcMain } = require("electron");
+const Positioner = require("electron-positioner");
 require("@electron/remote/main").initialize();
 
 /**
  * @type BrowserWindow
  */
 let window;
+
+/**
+ * @type Tray
+ */
 let tray;
+
 let visible = false;
+
+/**
+ * Based on code from https://github.com/maxogden/menubar/blob/master/src/util/getWindowPosition.ts
+ * @param {Electron.BrowserWindow} _window
+ * @param {Electron.Rectangle} _bounds
+ */
+const getPosition = (_window, _bounds) => {
+  const positioner = new Positioner(_window);
+  switch (process.platform) {
+    case "darwin":
+      return positioner.move("trayCenter", _bounds);
+    case "linux":
+      return positioner.move("topRight");
+    default:
+      return positioner.move("bottom", _bounds);
+  }
+};
 
 app.on("ready", () => {
   app.dock.hide();
@@ -29,24 +52,6 @@ app.on("ready", () => {
     visible = false;
   });
 
-  ipcMain.on("alert", () => {
-    const done = new BrowserWindow({
-      width: 300,
-      height: 300,
-      frame: false,
-      transparent: true,
-      skipTaskbar: true,
-      alwaysOnTop: true,
-      webPreferences: {
-        nodeIntegration: true,
-        nodeIntegrationInWorker: true,
-        enableRemoteModule: true,
-      },
-      resizable: false,
-    });
-    done.loadURL(`file://${__dirname}/dist/done.html`);
-  });
-
   window.loadURL(`file://${__dirname}/dist/index.html`);
 
   window.on("blur", () => {
@@ -58,15 +63,28 @@ app.on("ready", () => {
 
   tray.on("click", () => {
     if (!visible) {
-      const { height, width, x, y } = tray.getBounds();
-      window.setPosition(
-        x + width / 2 - window.getBounds().width / 2,
-        y + height
-      );
+      getPosition(window, tray.getBounds());
       window.show();
       visible = true;
     } else {
       window.hide();
     }
+  });
+
+  ipcMain.on("alert", () => {
+    const done = new BrowserWindow({
+      width: 300,
+      height: 300,
+      frame: false,
+      transparent: true,
+      skipTaskbar: true,
+      alwaysOnTop: true,
+      webPreferences: {
+        nodeIntegration: true,
+        nodeIntegrationInWorker: true,
+      },
+      resizable: false,
+    });
+    done.loadURL(`file://${__dirname}/dist/done.html`);
   });
 });

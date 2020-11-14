@@ -25,7 +25,6 @@ setInterval(() => {
 self.addEventListener(
   "message",
   ({ data: { data, type } }: MessageEvent<IWorkerMessage>) => {
-    console.log(type, data);
     switch (type) {
       case "start":
         ticks = 0;

@@ -1,13 +1,20 @@
 /** @jsx jsx */
 import React from "react";
-import {jsx, css} from '@emotion/react';
+import { jsx, css } from "@emotion/react";
 import { Button, H1 } from "@blueprintjs/core";
 import { TimePicker, TimePrecision } from "@blueprintjs/datetime";
 import { Progress } from "../Components/Progress";
 import { getMinTime } from "../Lib/timeUtil";
-import { Timer as TimerClass } from "../Lib/timer";
+import { ITimerState, Timer as TimerClass } from "../Lib/timer";
 
 import { ipcRenderer } from "electron";
+
+const TIMER_CONTAINER = css`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+`;
 
 const TIMER_SETUP = css`
   display: flex;
@@ -19,10 +26,10 @@ const TIMER_SETUP = css`
 `;
 
 const TIMER_START = css`
-opacity: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const padNumber = (num: number) => num.toString().padStart(2, "0");
@@ -32,6 +39,7 @@ export class Timer extends React.Component {
     selectedDuration: 0,
     duration: TimerClass.instance.duration,
     current: TimerClass.instance.current,
+    running: TimerClass.instance.state == ITimerState.Running,
   };
   startCallback = (duration) => this.setState({ duration });
   tickCallback = (current) => {
@@ -40,6 +48,9 @@ export class Timer extends React.Component {
   doneCallback = () => {
     this.setState({ duration: -1, current: 0 });
     ipcRenderer.send("alert");
+  };
+  stateCallback = (state) => {
+    this.setState({ running: state == ITimerState.Running });
   };
   startTimer() {
     if (this.state.selectedDuration > 0) {
@@ -68,34 +79,29 @@ export class Timer extends React.Component {
     TimerClass.instance.on("tick", this.tickCallback);
     TimerClass.instance.on("start", this.startCallback);
     TimerClass.instance.on("done", this.doneCallback);
+    TimerClass.instance.on("state", this.stateCallback);
   }
   componentWillUnmount() {
     TimerClass.instance.off("tick", this.tickCallback);
     TimerClass.instance.off("start", this.startCallback);
     TimerClass.instance.off("done", this.tickCallback);
+    TimerClass.instance.off("state", this.stateCallback);
   }
   render() {
     if (this.state.duration > -1) {
       return (
         <div
-          style={{ display: "flex", flexDirection: "column", height: "100%" }}
+          css={TIMER_CONTAINER}
           onClick={() => {
             TimerClass.instance.toggle();
           }}
         >
-          <div style={{ flex: 1 }}></div>
-          <Progress progress={this.state.current / this.state.duration}>
+          <Progress
+            progress={this.state.current / this.state.duration}
+            active={this.state.running}
+          >
             <H1>{this.formatTimeLeft()}</H1>
           </Progress>
-          <div
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              display: "flex",
-              alignContent: "center",
-            }}
-          >
-          </div>
         </div>
       );
     } else {

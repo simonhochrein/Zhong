@@ -12,16 +12,16 @@ import { DndProvider } from "react-dnd";
 import { SortableZone as SortableTimezone } from "../Components/SortableTimezone";
 import { jsx, css, Global } from "@emotion/react";
 
-const addTimezoneContainer = css`
+const ADD_TIMEZONE_CONTAINER = css`
   height: 120px;
   width: 80px;
   display: flex;
   justify-content: center;
   flex-shrink: 1;
   margin-top: 12;
-  /* align-items: center; */
 `;
-const addTimezoneIcon = css`
+const ADD_TIMEZONE_ICON = css`
+  margin-top: 13px;
   height: 62px;
   width: 62px;
   border-radius: 50%;
@@ -37,12 +37,20 @@ const addTimezoneIcon = css`
   }
 `;
 
+const CLOCK_GROUP = css`
+  padding: 40px 10px;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
 const AddTimezone: React.FunctionComponent<{ onClick: () => void }> = ({
   onClick,
 }) => {
   return (
-    <div css={addTimezoneContainer}>
-      <div css={addTimezoneIcon} onClick={onClick}>
+    <div css={ADD_TIMEZONE_CONTAINER}>
+      <div css={ADD_TIMEZONE_ICON} onClick={onClick}>
         <Icon icon="plus" />
       </div>
     </div>
@@ -90,8 +98,16 @@ export function WorldClock() {
 
   if (editMode) {
     return (
-      <div style={{ textAlign: "center" }}>
-        <div style={{ padding: "40px 0" }}>
+      <div
+        css={css`
+          text-align: center;
+        `}
+      >
+        <div
+          css={css`
+            padding: 40px 0;
+          `}
+        >
           <DndProvider backend={HTML5Backend}>
             {zones.map((zone, index) => (
               <SortableTimezone
@@ -103,7 +119,7 @@ export function WorldClock() {
             ))}
           </DndProvider>
         </div>
-        <Button onClick={() => setEditMode(false)}>Save</Button>
+        <Button onClick={() => setEditMode(false)}>Done</Button>
       </div>
     );
   }
@@ -127,15 +143,7 @@ export function WorldClock() {
           }
         `}
       />
-      <TransitionGroup
-        style={{
-          padding: "40px 10px",
-          textAlign: "center",
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-        }}
-      >
+      <TransitionGroup css={CLOCK_GROUP}>
         {zones.map((zone) => (
           <CSSTransition timeout={500} classNames="clock" key={zone}>
             <ClockFace

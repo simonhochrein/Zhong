@@ -1,9 +1,26 @@
+/** @jsx jsx */
 import { InputGroup, Menu, MenuItem, Button, Icon } from "@blueprintjs/core";
 import moment from "moment";
 import React from "react";
 import { Popup } from "./Popup";
 import Fuse from "fuse.js";
 import ReactDOM from "react-dom";
+import { jsx, css } from "@emotion/react";
+
+const TIMEZONE_PICKER = css`
+  height: 80%;
+  overflow: scroll;
+  flex: 1;
+  margin-top: 8px;
+`;
+
+const ACTION_CONTAINER = css`
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  max-height: 60px;
+  display: flex;
+`;
 
 interface ITimezonePickerProps {
   open: boolean;
@@ -61,7 +78,6 @@ export class TimezonePicker extends React.Component<
       const el = document.querySelector(
         `[data-timezone="${moment.tz.guess()}"]`
       );
-      console.log(el);
       if (el) {
         el.scrollIntoView({
           block: "center",
@@ -78,15 +94,13 @@ export class TimezonePicker extends React.Component<
   public render() {
     const { open, onClose } = this.props;
     return (
-      <Popup style={{ textAlign: "center" }} open={open}>
+      <Popup open={open}>
         <InputGroup
           leftIcon="search"
           placeholder="Choose a timezone"
           onChange={(e) => this.setState({ search: e.target.value })}
         />
-        <Menu
-          style={{ height: "80%", overflow: "scroll", flex: 1, marginTop: 8 }}
-        >
+        <Menu css={TIMEZONE_PICKER}>
           {this.filteredTimezones.map((name) => (
             <MenuItem
               disabled={!!~this.props.disabled.indexOf(name)}
@@ -98,15 +112,7 @@ export class TimezonePicker extends React.Component<
             />
           ))}
         </Menu>
-        <div
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 1,
-            maxHeight: 60,
-            display: "flex",
-          }}
-        >
+        <div css={ACTION_CONTAINER}>
           <Button minimal>
             <Icon iconSize={18} icon="small-cross" onClick={() => onClose()} />
           </Button>

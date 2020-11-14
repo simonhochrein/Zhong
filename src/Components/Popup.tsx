@@ -28,7 +28,7 @@ export const Popup: React.FunctionComponent<{ style?; open: boolean }> = ({
   open,
 }) => {
   return (
-    <TransitionGroup>
+    <TransitionGroup css={css`text-align: center;`}>
       <Global
         styles={css`
           .popup-enter {

@@ -2,7 +2,7 @@ import { EventEmitter } from "events";
 import { IWorkerMessage } from "./IWorkerMessage";
 import { worker } from "./sharedWorker";
 
-enum ITimerState {
+export enum ITimerState {
   Stopped,
   Running,
   Paused,
@@ -43,19 +43,20 @@ export class Timer extends EventEmitter {
 
   pause() {
     this.state = ITimerState.Paused;
+    this.emit("state", this.state);
     worker.postMessage({
       type: "pause",
     });
   }
   resume() {
     this.state = ITimerState.Running;
+    this.emit("state", this.state);
     worker.postMessage({
       type: "resume",
     });
   }
 
   toggle() {
-    console.log(this.state);
     if (this.state == ITimerState.Paused) {
       this.resume();
     } else if (this.state == ITimerState.Running) {
@@ -65,6 +66,7 @@ export class Timer extends EventEmitter {
 
   start(duration) {
     this.state = ITimerState.Running;
+    this.emit("state", this.state);
     this.duration = duration;
     this.emit("start", duration);
     worker.postMessage({

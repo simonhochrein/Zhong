@@ -48,6 +48,13 @@ to{
 }
 `;
 
+const DONE = css`
+  position: absolute;
+  top: 178px;
+  left: 50%auto;
+  transform: translateX(-50%);
+`;
+
 export function Done() {
   const points = [];
   const count = 20;
@@ -68,16 +75,22 @@ export function Done() {
         background-color: ${Colors.DARK_GRAY3};
       `}
     >
-      <Global styles={css`
-        html,body,#root {
-          height: 100%;
-        }
-      `}/>
+      <Global
+        styles={css`
+          html,
+          body,
+          #root {
+            height: 100%;
+          }
+        `}
+      />
       <svg
         width={300}
         height={300}
         viewBox={"0 0 300 300"}
-        style={{ position: "absolute" }}
+        css={css`
+          position: absolute;
+        `}
       >
         {points.map(({ x, y }, k) => (
           <circle
@@ -99,12 +112,7 @@ export function Done() {
         </text>
       </svg>
       <Button
-        style={{
-          position: "absolute",
-          top: 178,
-          left: "50%",
-          transform: "translateX(-50%)",
-        }}
+        css={DONE}
         intent="success"
         outlined
         onClick={() => window.close()}

@@ -5,6 +5,7 @@ import { Colors } from "@blueprintjs/core";
 
 interface IProgressProps {
   progress: number;
+  active?: boolean;
 }
 
 const PROGRESS_CONTAINER = css`
@@ -25,20 +26,6 @@ const PROGRESS = css`
   top: 0;
   transform: rotate(-90deg);
 `;
-
-/**
- * 
- * circle {
-        stroke: $pt-divider-black;
-        fill: none;
-        stroke-width: 4;
-        &.fill {
-          stroke-linecap: round;
-          stroke: $pt-intent-success;
-          transition: all 1000ms linear;
-        }
-      }
- */
 
 export const Progress: FunctionComponent<IProgressProps> = (props) => {
   const circumference = 2 * Math.PI * 54;
@@ -63,12 +50,12 @@ export const Progress: FunctionComponent<IProgressProps> = (props) => {
         {props.progress > -1 && (
           <circle
             css={css`
-              transition: all 1000ms linear;
+              transition: stroke-dashoffset 1000ms linear, stroke 200ms;
             `}
             strokeLinecap="round"
             fill="none"
             strokeWidth={4}
-            stroke={Colors.GREEN3}
+            stroke={props.active ? Colors.GREEN3 : Colors.DARK_GRAY5}
             r={54}
             cx={60}
             cy={60}

@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync } from "fs";
 import {join} from 'path';
 import {app} from '@electron/remote';
+import moment from "moment";
+import "moment-timezone";
 
 export class Storage {
   static settings = {};
@@ -21,6 +23,8 @@ export class Storage {
   static load() {
     try {
       this.settings = JSON.parse(readFileSync(this.path, "utf8"));
-    } catch {}
+    } catch {
+      this.settings = {timezones: [moment.tz.guess()]}
+    }
   }
 }
