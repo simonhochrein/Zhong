@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { Button, Colors } from "@blueprintjs/core";
-import { jsx, css, keyframes } from "@emotion/react";
+import { jsx, css, keyframes, Global } from "@emotion/react";
 import React from "react";
 
 const deg2rad = (deg) => (deg * Math.PI) / 180;
@@ -68,6 +68,11 @@ export function Done() {
         background-color: ${Colors.DARK_GRAY3};
       `}
     >
+      <Global styles={css`
+        html,body,#root {
+          height: 100%;
+        }
+      `}/>
       <svg
         width={300}
         height={300}

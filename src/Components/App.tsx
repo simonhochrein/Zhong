@@ -49,6 +49,11 @@ export function App() {
     <TabContext.Provider value={[tab, setTab]}>
       <Global
         styles={css`
+          html,
+          body,
+          #root {
+            height: 100%;
+          }
           body {
             margin: 0;
             opacity: 0.95;
