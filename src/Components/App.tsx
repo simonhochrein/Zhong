@@ -1,54 +1,40 @@
+/** @jsx jsx */
 import { Classes, Colors } from "@blueprintjs/core";
-import React, { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { Timer } from "../Pages/timer";
-import { nativeTheme } from "@electron/remote";
 import { WorldClock } from "../Pages/worldclock";
-import { css, cx } from "emotion";
 import { Footer } from "./Footer";
 import { TabContext } from "../Lib/TabContext";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { Timer as TimerClass } from "../Lib/timer";
 import { StopWatch } from "../Pages/stopwatch";
+import { jsx, css, Global } from "@emotion/react";
+
+const ROOT = css`
+  display: flex;
+  flex-direction: column;
+  background: ${Colors.DARK_GRAY3};
+  .popup {
+    background: ${Colors.DARK_GRAY3};
+  }
+`;
+const CONTENT = css`
+  flex-grow: 1;
+  position: relative;
+`;
+const PAGE = css`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+`;
+const FOOTER = css`
+  flex-shrink: 1;
+`;
 
 export function App() {
-  const [theme, setTheme] = useState(nativeTheme.shouldUseDarkColors);
   const [tab, setTab] = useState(0);
-  useEffect(() => {
-    const themeUpdateCallback = () => {
-      setTheme(nativeTheme.shouldUseDarkColors);
-    };
-    const doneCallback = () => {
-      setTab(2);
-    };
-    nativeTheme.on("updated", themeUpdateCallback);
-    TimerClass.instance.on("done", doneCallback);
-    return () => {
-      nativeTheme.off("updated", themeUpdateCallback);
-      TimerClass.instance.off("done", doneCallback);
-    };
-  }, []);
-  const ROOT = css`
-    display: flex;
-    flex-direction: column;
-    background: ${theme ? Colors.DARK_GRAY3 : Colors.WHITE};
-    .popup {
-      background: ${theme ? Colors.DARK_GRAY3 : Colors.WHITE};
-    }
-  `;
-  const CONTENT = css`
-    flex-grow: 1;
-    position: relative;
-  `;
-  const PAGE = css`
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  `;
-  const FOOTER = css`
-    flex-shrink: 1;
-  `;
+
   const getComponent = (tab) => {
     switch (tab) {
       case 0:
@@ -61,13 +47,44 @@ export function App() {
   };
   return (
     <TabContext.Provider value={[tab, setTab]}>
-      <div className={cx(theme ? Classes.DARK : "", ROOT)}>
-        <TransitionGroup className={CONTENT}>
+      <Global
+        styles={css`
+          body {
+            margin: 0;
+            opacity: 0.95;
+          }
+          * {
+            outline: none !important;
+          }
+          #root > div {
+            height: 100%;
+          }
+          .bp3-dark {
+            background: #293742;
+          }
+          .page-enter {
+            opacity: 0;
+          }
+          .page-enter-active {
+            opacity: 1;
+            transition: opacity 200ms;
+          }
+          .page-exit {
+            opacity: 1;
+          }
+          .page-exit-active {
+            opacity: 0;
+            transition: opacity 200ms;
+          }
+        `}
+      />
+      <div className={Classes.DARK} css={ROOT}>
+        <TransitionGroup css={CONTENT}>
           <CSSTransition classNames="page" timeout={200} key={tab}>
-            <div className={PAGE}>{getComponent(tab)}</div>
+            <div css={PAGE}>{getComponent(tab)}</div>
           </CSSTransition>
         </TransitionGroup>
-        <div className={FOOTER}>
+        <div css={FOOTER}>
           <Footer />
         </div>
       </div>

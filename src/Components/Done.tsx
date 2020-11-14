@@ -62,6 +62,7 @@ export function Done() {
   return (
     <div
       css={css`
+        height: 100%;
         position: relative;
         animation: ${fadeIn} 1s forwards;
         background-color: ${Colors.DARK_GRAY3};

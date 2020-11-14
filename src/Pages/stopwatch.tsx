@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { Button, H1 } from "@blueprintjs/core";
 import { jsx, css } from "@emotion/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { StopWatch as StopWatchClass } from "../Lib/stopwatch";
 

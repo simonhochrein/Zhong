@@ -1,25 +1,16 @@
-import { Button, Icon, InputGroup, Menu, MenuItem } from "@blueprintjs/core";
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+/** @jsx jsx */
+import { Button, Icon } from "@blueprintjs/core";
+import React, { useCallback, useEffect, useState } from "react";
 import { ClockFace } from "../Components/ClockFace";
 import "moment-timezone";
 import { Storage } from "../Lib/storage";
-import { css } from "emotion";
-import {
-  Transition,
-  CSSTransition,
-  TransitionGroup,
-} from "react-transition-group";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { TimezonePicker } from "../Components/TimezonePicker";
 
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { DndProvider } from "react-dnd";
 import { SortableZone as SortableTimezone } from "../Components/SortableTimezone";
+import { jsx, css, Global } from "@emotion/react";
 
 const addTimezoneContainer = css`
   height: 120px;
@@ -50,8 +41,8 @@ const AddTimezone: React.FunctionComponent<{ onClick: () => void }> = ({
   onClick,
 }) => {
   return (
-    <div className={addTimezoneContainer}>
-      <div className={addTimezoneIcon} onClick={onClick}>
+    <div css={addTimezoneContainer}>
+      <div css={addTimezoneIcon} onClick={onClick}>
         <Icon icon="plus" />
       </div>
     </div>
@@ -118,6 +109,24 @@ export function WorldClock() {
   }
   return (
     <div>
+      <Global
+        styles={css`
+          .clock-enter {
+            opacity: 0;
+          }
+          .clock-enter-active {
+            opacity: 1;
+            transition: opacity 500ms;
+          }
+          .clock-exit {
+            opacity: 1;
+          }
+          .clock-exit-active {
+            opacity: 0;
+            transition: opacity 500ms;
+          }
+        `}
+      />
       <TransitionGroup
         style={{
           padding: "40px 10px",

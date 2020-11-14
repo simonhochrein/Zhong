@@ -1,13 +1,29 @@
-import { Button, H1, Icon } from "@blueprintjs/core";
+/** @jsx jsx */
+import React from "react";
+import {jsx, css} from '@emotion/react';
+import { Button, H1 } from "@blueprintjs/core";
 import { TimePicker, TimePrecision } from "@blueprintjs/datetime";
-import React, { useEffect, useState } from "react";
 import { Progress } from "../Components/Progress";
 import { getMinTime } from "../Lib/timeUtil";
-
-import { BrowserWindow } from "@electron/remote";
 import { Timer as TimerClass } from "../Lib/timer";
 
 import { ipcRenderer } from "electron";
+
+const TIMER_SETUP = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  opacity: 1;
+`;
+
+const TIMER_START = css`
+opacity: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
 
 const padNumber = (num: number) => num.toString().padStart(2, "0");
 
@@ -35,19 +51,12 @@ export class Timer extends React.Component {
   };
 
   formatTimeLeft() {
-    const duration = this.state.duration;
-    let timeLeft = duration - this.state.current;
-    let hours = 0;
-    let minutes = 0;
-    if (timeLeft >= 3600) {
-      hours = (timeLeft - (timeLeft % 3600)) / 3600;
-      timeLeft -= hours * 3600;
-    }
-    if (timeLeft >= 60) {
-      minutes = (timeLeft - (timeLeft % 60)) / 60;
-      timeLeft -= minutes * 60;
-    }
-    let seconds = timeLeft;
+    let duration = this.state.duration - this.state.current;
+    let hours = Math.floor(duration / 3600);
+    duration -= hours * 3600;
+    let minutes = Math.floor(duration / 60);
+    duration -= minutes * 60;
+    let seconds = duration;
 
     if (duration >= 3600) {
       return hours + ":" + padNumber(minutes) + ":" + padNumber(seconds);
@@ -86,15 +95,13 @@ export class Timer extends React.Component {
               alignContent: "center",
             }}
           >
-            {/* <Icon icon="pause" /> */}
           </div>
         </div>
       );
     } else {
       return (
-        <div className={"timerDone"}>
-          {/* <H1>Time's up!</H1> */}
-          <div className="action">
+        <div css={TIMER_SETUP}>
+          <div css={TIMER_START}>
             <TimePicker
               selectAllOnFocus
               autoFocus
@@ -118,60 +125,3 @@ export class Timer extends React.Component {
     }
   }
 }
-
-// export function Timer() {
-//   const [active, setActive] = useState(false);
-
-//   const [duration, setDuration] = useState(0);
-
-//   useEffect(() => {
-//     // if (!active) {
-//     //   let w = BrowserWindow.getAllWindows()[0];
-//     //   if (!w.isFocused()) {
-//     //     w.hide();
-//     //     w.show();
-//     //   }
-//     // }
-
-//   }, []);
-
-//   const onChange = (newTime: Date) => {
-//     setDuration(newTime.getTime() - getMinTime());
-//   };
-
-//   const startTimer = () => {
-//     // const now = Date.now();
-//     // setStart(now);
-//     // setEnd(now + duration);
-//     // setActive(true);
-//   };
-
-//   if (progress > 0) {
-//     return (
-
-//     );
-//   }
-//   return (
-//     <div className={"timerDone"}>
-//       {/* <H1>Time's up!</H1> */}
-//       <div className="action">
-//         <TimePicker
-//           selectAllOnFocus
-//           autoFocus
-//           showArrowButtons
-//           precision={TimePrecision.SECOND}
-//           onChange={onChange}
-//         />
-//         <Button
-//           intent={"success"}
-//           onClick={startTimer}
-//           fill
-//           large
-//           className="start"
-//         >
-//           Start New Timer
-//         </Button>
-//       </div>
-//     </div>
-//   );
-// }
