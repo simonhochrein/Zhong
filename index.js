@@ -57,7 +57,7 @@ app.on("ready", () => {
   window.loadURL(`file://${__dirname}/dist/index.html`);
 
   window.on("blur", () => {
-    // window.hide();
+    window.hide();
   });
 
   tray = new Tray(`${__dirname}/img/ZhongTemplate.png`);

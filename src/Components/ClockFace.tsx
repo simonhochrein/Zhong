@@ -35,6 +35,7 @@ export class ClockFace extends React.Component<
   IClockFaceProps,
   IClockFaceState
 > {
+  private interval: NodeJS.Timeout;
   constructor(props) {
     super(props);
     this.state = {
@@ -43,9 +44,12 @@ export class ClockFace extends React.Component<
     };
   }
   componentDidMount() {
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.setState(this.currentTime());
     }, 100);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   currentTime() {
@@ -80,9 +84,23 @@ export class ClockFace extends React.Component<
       <div
         style={{ ...(style ? style : {}) }}
         className={cx(CLOCKFACE, { [CLOCKFACE_ACTIVE]: this.state.active })}
-        onClick={(e) => e.target.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, clientX: e.clientX, clientY: e.clientY}))}
+        onClick={(e) =>
+          e.target.dispatchEvent(
+            new MouseEvent("contextmenu", {
+              bubbles: true,
+              clientX: e.clientX,
+              clientY: e.clientY,
+            })
+          )
+        }
       >
-        <svg viewBox="0 0 80 120" width={80} height={120} color={Colors.WHITE} style={{pointerEvents: 'none'}}>
+        <svg
+          viewBox="0 0 80 120"
+          width={80}
+          height={120}
+          color={Colors.WHITE}
+          style={{ pointerEvents: "none" }}
+        >
           <circle
             fill="none"
             cx={40}
