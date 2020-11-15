@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 
-export class StopWatch extends EventEmitter {
+export class StopwatchService extends EventEmitter {
     private _offset = 0;
     private _time = 0;
     private _start = 0;
@@ -44,5 +44,5 @@ export class StopWatch extends EventEmitter {
         this.emit('state', false);
     }
 
-    static instance = new StopWatch();
+    static instance = new StopwatchService();
 }

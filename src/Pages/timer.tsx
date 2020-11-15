@@ -5,7 +5,7 @@ import { Button, H1 } from "@blueprintjs/core";
 import { TimePicker, TimePrecision } from "@blueprintjs/datetime";
 import { Progress } from "../Components/Progress";
 import { getMinTime } from "../Lib/timeUtil";
-import { ITimerState, Timer as TimerClass } from "../Lib/timer";
+import { ITimerState, TimerService } from "../Lib/TimerService";
 
 import { ipcRenderer } from "electron";
 
@@ -37,9 +37,9 @@ const padNumber = (num: number) => num.toString().padStart(2, "0");
 export class Timer extends React.Component {
   state = {
     selectedDuration: 0,
-    duration: TimerClass.instance.duration,
-    current: TimerClass.instance.current,
-    running: TimerClass.instance.state == ITimerState.Running,
+    duration: TimerService.instance.duration,
+    current: TimerService.instance.current,
+    running: TimerService.instance.state == ITimerState.Running,
   };
   startCallback = (duration) => this.setState({ duration });
   tickCallback = (current) => {
@@ -56,7 +56,7 @@ export class Timer extends React.Component {
   };
   startTimer() {
     if (this.state.selectedDuration > 0) {
-      TimerClass.instance.start(this.state.selectedDuration / 1000);
+      TimerService.instance.start(this.state.selectedDuration / 1000);
     }
   }
   onChange = (newTime: Date) => {
@@ -64,7 +64,7 @@ export class Timer extends React.Component {
   };
   reset = (e: React.MouseEvent) => {
     e.stopPropagation();
-    TimerClass.instance.reset();
+    TimerService.instance.reset();
   }
 
   formatTimeLeft() {
@@ -82,16 +82,16 @@ export class Timer extends React.Component {
     }
   }
   componentDidMount() {
-    TimerClass.instance.on("tick", this.tickCallback);
-    TimerClass.instance.on("start", this.startCallback);
-    TimerClass.instance.on("done", this.doneCallback);
-    TimerClass.instance.on("state", this.stateCallback);
+    TimerService.instance.on("tick", this.tickCallback);
+    TimerService.instance.on("start", this.startCallback);
+    TimerService.instance.on("done", this.doneCallback);
+    TimerService.instance.on("state", this.stateCallback);
   }
   componentWillUnmount() {
-    TimerClass.instance.off("tick", this.tickCallback);
-    TimerClass.instance.off("start", this.startCallback);
-    TimerClass.instance.off("done", this.tickCallback);
-    TimerClass.instance.off("state", this.stateCallback);
+    TimerService.instance.off("tick", this.tickCallback);
+    TimerService.instance.off("start", this.startCallback);
+    TimerService.instance.off("done", this.tickCallback);
+    TimerService.instance.off("state", this.stateCallback);
   }
   render() {
     if (this.state.duration > -1) {
@@ -99,7 +99,7 @@ export class Timer extends React.Component {
         <div
           css={TIMER_CONTAINER}
           onClick={() => {
-            TimerClass.instance.toggle();
+            TimerService.instance.toggle();
           }}
         >
           <Progress

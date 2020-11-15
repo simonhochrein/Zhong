@@ -8,7 +8,7 @@ export enum ITimerState {
   Paused,
 }
 
-export class Timer extends EventEmitter {
+export class TimerService extends EventEmitter {
   public duration = -1;
   public current = 0;
   public state = ITimerState.Paused;
@@ -83,5 +83,5 @@ export class Timer extends EventEmitter {
       data: duration,
     });
   }
-  static instance = new Timer();
+  static instance = new TimerService();
 }

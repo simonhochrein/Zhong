@@ -3,7 +3,7 @@ import { Button, H1 } from "@blueprintjs/core";
 import { jsx, css } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 
-import { StopWatch as StopWatchClass } from "../Lib/stopwatch";
+import { StopwatchService } from "../Lib/StopwatchService";
 
 const CONTAINER = css`
   display: flex;
@@ -26,8 +26,8 @@ const BUTTON = css`
 `;
 
 export function StopWatch() {
-  const [running, setRunning] = useState(StopWatchClass.instance.running);
-  const [time, setTime] = useState(StopWatchClass.instance.time);
+  const [running, setRunning] = useState(StopwatchService.instance.running);
+  const [time, setTime] = useState(StopwatchService.instance.time);
 
   useEffect(() => {
     const tickListener = (_time) => {
@@ -36,11 +36,11 @@ export function StopWatch() {
     const stateListener = (_running) => {
       setRunning(_running);
     };
-    StopWatchClass.instance.on("tick", tickListener);
-    StopWatchClass.instance.on("state", stateListener);
+    StopwatchService.instance.on("tick", tickListener);
+    StopwatchService.instance.on("state", stateListener);
     return () => {
-      StopWatchClass.instance.off("tick", tickListener);
-      StopWatchClass.instance.off("state", stateListener);
+      StopwatchService.instance.off("tick", tickListener);
+      StopwatchService.instance.off("state", stateListener);
     };
   }, [running]);
 
@@ -70,7 +70,7 @@ export function StopWatch() {
           <div css={BUTTON}>
             <Button
               outlined
-              onClick={() => StopWatchClass.instance.reset()}
+              onClick={() => StopwatchService.instance.reset()}
               icon="reset"
               intent="warning"
               large
@@ -83,8 +83,8 @@ export function StopWatch() {
               intent="success"
               onClick={() =>
                 running
-                  ? StopWatchClass.instance.stop()
-                  : StopWatchClass.instance.start()
+                  ? StopwatchService.instance.stop()
+                  : StopwatchService.instance.start()
               }
               icon={running ? "pause" : "play"}
             />

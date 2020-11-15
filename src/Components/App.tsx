@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { Classes, Colors } from "@blueprintjs/core";
 import { useState } from "react";
-import { Timer } from "../Pages/timer";
-import { WorldClock } from "../Pages/worldclock";
+import { Timer } from "../Pages/Timer";
+import { WorldClock } from "../Pages/WorldClock";
 import { Footer } from "./Footer";
 import { TabContext } from "../Lib/TabContext";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { StopWatch } from "../Pages/stopwatch";
+import { StopWatch } from "../Pages/Stopwatch";
 import { jsx, css, Global } from "@emotion/react";
 
 const ROOT = css`

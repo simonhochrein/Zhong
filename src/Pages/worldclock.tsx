@@ -3,7 +3,7 @@ import { Button, Icon } from "@blueprintjs/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { ClockFace } from "../Components/ClockFace";
 import "moment-timezone";
-import { Storage } from "../Lib/storage";
+import { Storage } from "../Lib/Storage";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { TimezonePicker } from "../Components/TimezonePicker";
 
