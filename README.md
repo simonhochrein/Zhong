@@ -7,9 +7,7 @@ The missing clock for macOS and Windows
 
 ## Screenshots
 
-<img src="docs/WorldClock.png" width="206" height="306" alt="World Clock" style="display: inline-block">
-<img src="docs/Stopwatch.png" width="206" height="306" alt="Stopwatch" style="display: inline-block">
-<img src="docs/Timer.png" width="206" height="306" alt="Timer" style="display: inline-block">
+<img src="docs/Screenshots.png" width="618" height="306" alt="Screenshots">
 
 ## Installation
 You can download the latest release from the [releases](https://github.com/simonhochrein/Zhong/releases) page
