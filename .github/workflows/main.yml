@@ -6,10 +6,10 @@ name: Build Artifacts
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
 
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch: 
@@ -33,3 +33,15 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Pack
+        run: yarn pack
+
+      - name: Electron Builder
+        run: yarn dist
+
+      - name: Archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: Zhong-macos
+          path: build/Zhong-1.0.0-mac.zip
