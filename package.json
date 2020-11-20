@@ -9,7 +9,7 @@
     "build": "parcel build --target=electron --public-url=. src/*.html",
     "start": "electron index.js",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder -mw"
   },
   "devDependencies": {
     "@types/moment-timezone": "^0.5.30",
@@ -52,8 +52,11 @@
     "directories": {
       "output": "build"
     },
+    "win": {
+      "icon": "img/Zhong.ico"
+    },
     "mac": {
-      "target": [],
+      "target": ["zip"],
       "category": "public.app-category.productivity",
       "icon": "img/Zhong.icns"
     }
