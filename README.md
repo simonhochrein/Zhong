@@ -1,4 +1,4 @@
-![Zhong Icon](docs/Zhong.png)
+<img src="docs/Zhong.png" alt="Zhong Logo" width="256" height="256">
 
 # Zhong
 The missing clock for macOS and Windows

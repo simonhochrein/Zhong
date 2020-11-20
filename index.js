@@ -60,7 +60,7 @@ app.on("ready", () => {
     window.hide();
   });
 
-  tray = new Tray(`${__dirname}/img/ZhongTemplate.png`);
+  tray = new Tray(`${__dirname}/img/${process.platform == "darwin" ? "ZhongTemplate" : "Zhong"}.png`);
   tray.setIgnoreDoubleClickEvents(true);
 
   tray.on("click", () => {
