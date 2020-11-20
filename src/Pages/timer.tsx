@@ -75,7 +75,7 @@ export class Timer extends React.Component {
     duration -= minutes * 60;
     let seconds = duration;
 
-    if (duration >= 3600) {
+    if (hours > 0) {
       return hours + ":" + padNumber(minutes) + ":" + padNumber(seconds);
     } else {
       return padNumber(minutes) + ":" + padNumber(seconds);
