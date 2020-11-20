@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 import { IWorkerMessage } from "./IWorkerMessage";
-import { worker } from "./sharedWorker";
+
+const worker = new Worker("worker.ts");
 
 export enum ITimerState {
   Stopped,
