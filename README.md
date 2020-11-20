@@ -12,5 +12,18 @@ The missing clock for macOS and Windows
 ## Installation
 You can download the latest release from the [releases](https://github.com/simonhochrein/Zhong/releases) page
 
+## Development
+
+After you clone the repo, and run these commands in separate terminals:
+
+```
+yarn dev
+```
+
+```
+yarn start
+```
+
+
 ## License
 [MIT License](LICENSE)
